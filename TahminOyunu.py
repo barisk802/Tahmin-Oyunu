@@ -59,4 +59,3 @@ if data:
         st.write(f"{i}. {satir['İsim']} - {satir['Deneme']} deneme ({satir['Tarih']})")
 else:
     st.write("Henüz kayıt yok.")
-
