@@ -1,20 +1,21 @@
 import streamlit as st
 import random
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 from datetime import datetime
 import json
 
 st.title("🎯 Sayıyı Tahmin Et - Google Sheets Skor Kaydı")
 
-# Google Sheets bağlantısı
-scope = ["https://spreadsheets.google.com/feeds",
-         "https://www.googleapis.com/auth/drive"]
-
-# Secrets üzerinden JSON alıp dict'e çeviriyoruz
+# Secrets üzerinden JSON alıyoruz
 json_creds = st.secrets["gcp_service_account"]["key"]
 creds_dict = json.loads(json_creds)
-credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+
+# Google Sheets bağlantısı
+scope = ["https://www.googleapis.com/auth/spreadsheets",
+         "https://www.googleapis.com/auth/drive"]
+
+credentials = Credentials.from_service_account_info(creds_dict, scopes=scope)
 client = gspread.authorize(credentials)
 
 # Google Sheet açma
