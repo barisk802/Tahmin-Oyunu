@@ -3,6 +3,7 @@ import random
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+import json
 
 st.title("🎯 Sayıyı Tahmin Et - Google Sheets Skor Kaydı")
 
@@ -10,7 +11,10 @@ st.title("🎯 Sayıyı Tahmin Et - Google Sheets Skor Kaydı")
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive"]
 
-credentials = ServiceAccountCredentials.from_json_keyfile_name("streamlit-anahtar.json", scope)
+# st.secrets üzerinden JSON alıp dict'e çeviriyoruz
+json_creds = st.secrets["gcp_service_account"]["key"]
+creds_dict = json.loads(json_creds)
+credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(credentials)
 
 sheet = client.open("sayi_tahmin_skorlar").sheet1  # Google Sheet adınla aynı olmalı
@@ -54,3 +58,4 @@ if data:
         st.write(f"{i}. {satir['İsim']} - {satir['Deneme']} deneme ({satir['Tarih']})")
 else:
     st.write("Henüz kayıt yok.")
+
