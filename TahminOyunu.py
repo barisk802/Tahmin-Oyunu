@@ -11,13 +11,14 @@ st.title("🎯 Sayıyı Tahmin Et - Google Sheets Skor Kaydı")
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/drive"]
 
-# st.secrets üzerinden JSON alıp dict'e çeviriyoruz
+# Secrets üzerinden JSON alıp dict'e çeviriyoruz
 json_creds = st.secrets["gcp_service_account"]["key"]
 creds_dict = json.loads(json_creds)
 credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(credentials)
 
-sheet = client.open("sayi_tahmin_skorlar").sheet1  # Google Sheet adınla aynı olmalı
+# Google Sheet açma
+sheet = client.open("sayi_tahmin_skorlar").sheet1  # Sheet adı tam olarak eşleşmeli
 
 # Oyun değişkenleri
 if "sayi" not in st.session_state:
